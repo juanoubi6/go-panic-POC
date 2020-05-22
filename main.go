@@ -8,7 +8,7 @@ func main() {
 	result, err := jobExecutor()
 	if err != nil {
 		println("Job executor failed: ", err.Error())
-	}else{
+	} else {
 		println("Job executor succeeded. Result: ", result)
 	}
 

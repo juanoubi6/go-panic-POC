@@ -1,20 +1,26 @@
 package main
 
+import "errors"
+
 // Expected result: the panic() will trigger all the defers of the functions from the stack in order until
 // it's handled by the recover() in the jobExecutor defer.
 func main() {
 	result, err := jobExecutor()
 	if err != nil {
 		println("Job executor failed: ", err.Error())
+	}else{
+		println("Job executor succeeded. Result: ", result)
 	}
 
-	println("Program finished. Result: ", result)
 }
 
-func jobExecutor() (int, error) {
+func jobExecutor() (result int, error error) {
 	defer func() {
 		if err := recover(); err != nil {
-			println("Panic handled in jobExecutor defer. Cause: ", err.(string))
+			panicMsg := err.(string)
+			println("Panic handled in jobExecutor defer. Cause: ", panicMsg)
+			// Using named return param to be able to return an error
+			error = errors.New(panicMsg)
 		} else {
 			println("Executing job executor defer")
 		}
